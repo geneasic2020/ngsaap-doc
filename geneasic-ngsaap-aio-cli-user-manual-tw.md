@@ -1,23 +1,13 @@
----
-title: GeneASIC NGSAAP All-in-One 命令列工具使用者手冊
-
----
-
-
-
+# GeneASIC NGSAAP All-in-One 命令列工具使用者手冊 (1.1.0_b)
 ```
 聯絡資訊:
 GeneASIC Technologies Corp.
 info@geneasic.com
 ```
 
-版本 1. 1 .0\_b
-
-# GeneASIC NGSAAP All-in-One 命令列工具使用者手冊
-
 ## 閱讀使用者手冊之前
 
-本使用者手冊適用於 GeneASIC NGSAAP All-in-One v1. 1 .0 版本。在使用 GeneASIC NGSAAP 之前，請務必詳細閱讀本手冊。
+本使用者手冊適用於 GeneASIC NGSAAP All-in-One v1.1.0 版本。在使用 GeneASIC NGSAAP 之前，請務必詳細閱讀本手冊。
 
 本文件中包含的所有圖片僅作為示意範例。實際軟體內容可能略有不同。
 如需準確資訊，請參閱您所取得的軟體版本。
@@ -31,27 +21,9 @@ GeneASIC Technologies Corp. 已採取措施確保本手冊的準確性。儘管�
 © 2025 GeneASIC Technologies Corp. 保留所有權利。
 
 ## 目錄
+[toc]
 
-  - 1.  簡介
-    <!-- end list -->
-      - 1.1 運算架構
-      - 1.2 基因組變異分析流程
-  - 2.  WGS 分析範例
-    <!-- end list -->
-      - 2.1 自訂流程配置設定
-      - 2.2 產生資料集列表檔案
-  - 3.  命令列操作詳情
-    <!-- end list -->
-      - 3.1 gconf: 流程配置設定
-      - 3.2 gsched: 樣本資料配置
-      - 3.3 gsub: 作業提交
-      - 3.4 gwatch: 作業佇列檢視器
-      - 3.5 gcancel : 作業取消
-      - 3.6 gversion : 程式版本檢視器
-      - 3.7 acctmgr : 使用者帳號管理員
-  - 4.  修訂歷史
-
-## 1\. 簡介
+## 1. 簡介
 
 GeneASIC NGSAAP（次世代定序分析加速平台）是一套基於 FPGA（現場可程式化邏輯閘陣列）的硬體加速 NGS 二級分析系統。除了基因組分析能力外，GeneASIC NGSAAP 的設計還考量了可擴展性與易用性，採用串流架構在分散式運算框架中即時處理資料。
 
