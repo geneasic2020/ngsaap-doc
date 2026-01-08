@@ -6,6 +6,8 @@
 GeneASIC Technologies Corp.
 info@geneasic.com
 ```
+![Table1](https://hackmd.io/_uploads/S1XiihnVZg.png)
+
 
 ## 閱讀使用者手冊之前
 
