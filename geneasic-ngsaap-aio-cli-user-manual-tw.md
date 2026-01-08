@@ -1,4 +1,6 @@
-# GeneASIC NGSAAP All-in-One 命令列工具使用者手冊 (1.1.0_b)
+# GeneASIC NGSAAP All-in-One 命令列工具使用者手冊
+適用版本：1.1.0_b
+
 ```
 聯絡資訊:
 GeneASIC Technologies Corp.
@@ -7,7 +9,8 @@ info@geneasic.com
 
 ## 閱讀使用者手冊之前
 
-本使用者手冊適用於 GeneASIC NGSAAP All-in-One v1.1.0 版本。在使用 GeneASIC NGSAAP 之前，請務必詳細閱讀本手冊。
+本使用者手冊適用於 GeneASIC NGSAAP All-in-One v1.1.0 版本。
+在使GeneASIC NGSAAP 之前，請務必詳細閱讀本手冊。
 
 本文件中包含的所有圖片僅作為示意範例。實際軟體內容可能略有不同。
 如需準確資訊，請參閱您所取得的軟體版本。
