@@ -1,5 +1,5 @@
 # GeneASIC NGSAAP All-in-One 命令列工具使用者手冊
-適用版本：1.1.0_b
+適用版本：1.1.0_c
 
 ```
 聯絡資訊:
@@ -290,7 +290,7 @@ gsched -s fastq -i /home/egs -j ‘(\w+)_R[12]’ --as-csv | tee data.csv
 表 5 短片段重複序列 (Short tandem repeat, STR) 大小估計可用選項
 | 選項 | 描述 |
 | ------ | ----------- |
-| \--repeat-region-extensionlength *\<INT\>* |設定搜尋目標區域周圍讀段的片段長度。預設值為 *1000*。 |
+| \--repeat-region-extension-length *\<INT\>* |設定搜尋目標區域周圍讀段的片段長度。預設值為 *1000*。 |
 | \--repeat-variant-catalog *PATH* |設定用於變異基因型鑑定（Genotyping）的 JSON 目錄路徑。。預設為 */opt/geneasic/database/ehunter/variant\_catalog.{hg}.json* |
 
 表 6 HLA 分型可用選項
@@ -354,19 +354,19 @@ gsched -b batch.yaml \
 
 | 選項 | 描述 |
 | ------ | ----------- |
-| -g, \--assembly *\<VERSION\>* |  控基因組組裝所使用的參考基因組。*\<VERSION\>* 應指定為 hs38d2，hs37d5，hg19或hg38。預設值為 *hs38d2*。|
+| -g, \--assembly *\<VERSION\>* |  控基因組組裝所使用的參考基因組。*\<VERSION\>* 應指定為 hs38DH，hs37d5，hg19或hg38。預設值為 *hs38DH*。|
 | -p, \--pipeline *\<ID\>* | 指定分析所使用的流程配置。輸入 *-p 或 --pipeline* 後連按兩次 TAB 鍵可查看可用選項。也可使用*gconf insepct* 指令查看。|
 
 下表說明了在分析配置中，透過 `-g, --assembly`  參數可選擇的基因組版本及其技術特性：
 
 表 10.2 參考基因組分析配置選項
 
-| 選項 | 描述 |參考文獻 |
-| ------ | ----------- |----------- |
-| hs38DH (預設) |基於 hs38DH 的優化版本。除了包含完整的 GRCh38 分析集（含誘餌序列與 HLA）外，更採用了調整後的屏蔽 (Masking) 方法處理替代位點 (ALT contigs)，並對特定策略區域(Strategic regions)進行硬屏蔽，是全基因組定序 (WGS) 的最佳推薦選擇。  |Li H. (2013). arXiv:1303.3997; Illumina DRAGEN Guide|
-| hs37d5 |源自 GRCh37 的完整分析集。此版本額外包含人類誘餌序列 (Decoy sequences) 與 EBV 病毒序列，能有效吸收非目標片段，從而減少變異偵測的假陽性。為臨床診斷的標準版本。 |1000 Genomes Consortium. (2015). *Nature*|
-| hg19 |UCSC 標準 GRCh37 參考序列。作為早期標準版本，本組裝亦包含誘餌序列以改善序列比對品質，適用於需與歷史數據對照的分析。 |Schneider et al. (2017). *Genome Research*|
-| hg38 |UCSC 標準 GRCh38 參考序列。包含主染色體與替代位點 (ALT)，但不包含 hs38d2 隨附的人類誘餌序列 (Decoys)，適用於一般視覺化或不需要誘餌序列輔助的特定分析。 |Schneider et al. (2017). *Genome Research*|
+| 選項 | 描述 |
+| ------ | ----------- |
+| hs38DH (預設) |基於 hs38DH 的優化版本。除了包含完整的 GRCh38 分析集（含誘餌序列與 HLA）外，更採用了調整後的屏蔽 (Masking) 方法處理替代位點 (ALT contigs)，並對特定策略區域(Strategic regions)進行硬屏蔽，是全基因組定序 (WGS) 的最佳推薦選擇。<br/>https://ftp-trace.ncbi.nih.gov/1000genomes/ftp/technical/reference/GRCh38_reference_genome/GRCh38_full_analysis_set_plus_decoy_hla.fa |
+| hs37d5 |源自 GRCh37 的完整分析集。此版本額外包含人類誘餌序列 (Decoy sequences) 與 EBV 病毒序列，能有效吸收非目標片段，從而減少變異偵測的假陽性。為臨床診斷的標準版本。<br/>https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/technical/reference/phase2_reference_assembly_sequence/hs37d5.fa.gz |
+| hg19 |UCSC 標準 GRCh37 參考序列。作為早期標準版本，本組裝亦包含誘餌序列以改善序列比對品質，適用於需與歷史數據對照的分析。<br/>https://hgdownload.soe.ucsc.edu/goldenPath/hg19/bigZips/hg19.fa.gz |
+| hg38 |UCSC 標準 GRCh38 參考序列。包含主染色體與替代位點 (ALT)，但不包含 hs38DH 隨附的人類誘餌序列 (Decoys)，適用於一般視覺化或不需要誘餌序列輔助的特定分析。<br/>https://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz |
 
 不同來源的參考基因組在命名規則與組成上有顯著差異。使用者可透過下表快速識別並驗證所使用的參考檔案：
 
@@ -377,24 +377,52 @@ gsched -b batch.yaml \
 | hs38DH | NCBI     |3366    | chr1, chrUn     | chrUn*_decoy     |
 | hs37d5 | NCBI/1000 Genome | 86     | 1, GL*     | hs37d5     |
 | hg38   | UCSC     | 455     | chr1, chrUn     | N/A     |
-| hg39   | UCSC     | 93     | chr1, chrUn     | N/A     |
+| hg19   | UCSC     | 93     | chr1, chrUn     | N/A     |
 
 *N/A:不適用
 
 
 為了提升比對精度，高品質的分析集（如 hs38DH）由多種功能的序列組成。以下說明各類元件的定義與目的：
 
-表 10.4 參考基因組元件解析 (以 hs38DH 為例)
+表 10.4 hs38DH參考基因組元件解析
 
 | 類別 | contig數量 |描述  |
 | --- | ---------  |---  |
-| 主參考序列 (Main Reference) | 25  |包含染色體 chr1-22、X、Y 以及線粒體 (chrM)，是人類基因組的核心區域。 |
-| 未定位序列 (Unlocalised Sequences) | 42  |標示為 chr*_random。已知屬於特定染色體，但具體座標尚未確定的序列。|
-| 未放置序列 (Unplaced Sequences) | 127  |標示為 chrUn*。確信屬於人類基因組，但無法確定其源自哪條染色體的序列。|
+| 主參考序列 (Main Reference) | 25  |包含染色體 chr1-22、chrX、chrY 以及線粒體 (chrM)，是人類基因組的核心區域。 |
+| 未定位序列 (Unlocalized Sequence) | 42  |標示為 chr*_random。已知屬於特定染色體，但具體座標尚未確定的序列。|
+| 未放置序列 (Unplaced Sequence) | 127  |標示為 chrUn*。確信屬於人類基因組，但無法確定其源自哪條染色體的序列。|
 | 替代位點 (Alternative Loci) | 261  |標示為 chr*_alt。代表人類族群中高度多態性的區域（如免疫系統相關基因），用於「替代位點感知 (Alt-aware)」比對，防止假陽性。|
 | 愛潑斯坦-巴爾病毒序列 (EBV sequence) | 1  |標示為 chrEBV。用於吸收樣本中潛在的病毒 DNA 片段，避免其干擾人類基因比對。 |
-| 誘餌序列 (Decoy Sequences) | 2385  |標示為 chrUn*_decoy。作為「匯漏 (Sink)」，吸引容易引起誤比對的重複序列或非參考片段，是提升 WGS 準確度的關鍵。|
-| HLA 序列 (HLA Sequences) | 525  |標示為 HLA-*。專門針對高度複雜的 HLA 區域設計的等位基因序列，對於精準的 HLA 分型至關重要。 |
+| 誘餌序列 (Decoy Sequence) | 2385  |標示為 chrUn*_decoy。作為「匯漏 (Sink)」，吸引容易引起誤比對的重複序列或非參考片段，是提升 WGS 準確度的關鍵。|
+| HLA 序列 (HLA Sequence) | 525  |標示為 HLA-*。專門針對高度複雜的 HLA 區域設計的等位基因序列，對於精準的 HLA 分型至關重要。 |
+
+表 10.5 hs37d5參考基因組元件解析
+
+| 類別 | contig數量 |描述  |
+| --- | ---------  |---  |
+| 主參考序列 (Main Reference) | 25  |包含染色體 1-22、X、Y 以及線粒體 (MT)，是人類基因組的核心區域。 |
+| 未定位序列 (Unlocalized Sequence) | 20  |標示為GL編號範圍 GL000191.1 ~ GL000226.1。已知屬於特定染色體，但具體座標尚未確定的序列。|
+| 未放置序列 (Unplaced Sequence) | 39  |標示為GL編號範圍GL000227.1 ~ GL000249.1。確信屬於人類基因組，但無法確定其源自哪條染色體的序列。|
+| 愛潑斯坦-巴爾病毒序列 (EBV sequence) | 1  |標示為 NC_007605。用於吸收樣本中潛在的病毒 DNA 片段，避免其干擾人類基因比對。 |
+| 誘餌序列 (Decoy Sequence) | 1  |標示為 hs37d5。作為「匯漏 (Sink)」，吸引容易引起誤比對的重複序列或非參考片段，是提升 WGS 準確度的關鍵。|
+
+表 10.6 hg38參考基因組元件解析
+
+| 類別 | contig數量 |描述  |
+| --- | ---------  |---  |
+| 主參考序列 (Main Reference) | 25  |包含染色體 chr1-22、chrX、chrY 以及線粒體 (chrM)，是人類基因組的核心區域。 |
+| 未定位序列 (Unlocalised Sequence) | 42  |標示為chr*_random。已知屬於特定染色體，但具體座標尚未確定的序列。|
+| 未放置序列 (Unplaced Sequence) | 127  |標示為chrUn_*。確信屬於人類基因組，但無法確定其源自哪條染色體的序列。|
+| 替代位點 (Alternative Loci) | 261  |標示為 chr*_alt。代表人類族群中高度多態性的區域（如免疫系統相關基因），用於「替代位點感知 (Alt-aware)」比對，防止假陽性。|
+
+表 10.7 hg19參考基因組元件解析
+
+| 類別 | contig數量 |描述  |
+| --- | ---------  |---  |
+| 主參考序列 (Main Reference) | 25  |包含染色體 chr1-22、chrX、chrY 以及線粒體 (chrM)，是人類基因組的核心區域。 |
+| 未定位序列 (Unlocalized Sequence) | 20  |標示為chr*_random。已知屬於特定染色體，但具體座標尚未確定的序列。|
+| 未放置序列 (Unplaced Sequence) | 39  |標示為chrUn_*。確信屬於人類基因組，但無法確定其源自哪條染色體的序列。|
+| 替代位點 (Alternative Loci) | 9  |標示為 chr*_hap?。代表人類族群中高度多態性的區域（如免疫系統相關基因），用於「替代位點感知 (Alt-aware)」比對，防止假陽性。|
 
 
 表 11 數據匯入可用選項
@@ -418,7 +446,7 @@ gsched -b batch.yaml \
 表 12 結果輸出可用選項
 |  選項  | 描述         |
 | ----------- | ---------------------------------- |
-| -t, \--target *\<CHOICE\>* |  指定所需的分析與輸出結果。*\<CHOICE\>* 可包含一個或多個選擇。<br>•fastq<br>建立指向來源 FASTQ 檔案的軟連結(symbolic link)。<br>• bam<br>使用 GeneASIC NGSAAP 比對器執行短讀長序列比對，產出 BAM 檔案及.bai 索引檔案。若配合 -s 選項且偵測到現有 BAM 檔，則改為建立軟連結。<br>• vcf<br>使用 GeneASIC NGSAAP 變異偵測器執行類似 GATK 短變異偵測，產出 .vcf.gz 檔案及 .vcf.gz.tbi 索引檔。若配合 -s 選項且偵測到現有 VCF 檔，則改為建立軟連結。<br>• sv<br>調用 Manta 偵測結構變異，產出 .sv.vcf.gz 及 .sv.vcf.gz.tbi 檔案。如果與 -s 選項一起指定時偵測到現有的 .sv.vcf.gz 檔案，此選項將建立指向輸入檔案來源的軟連結。<br>• px<br>建立指向來源輸入 .px.json 檔案的軟連結。<br>• cnv<br>使用 ASCAT R 套件執行拷貝數變異分析，並由 SLMSuite 進行分段（Segmentation）。啟用此選項會輸出 *.segment.SLMed.txt* 檔案。<br>• upd<br>執行潛在單親二倍體（Uniparental Disomy）提取，產出 .upd.txt 候選清單供變異判讀使用。<br>• smn<br>執行針對 SMN1、SMN2 及 SMN2Δ7-8 的拷貝數變異分析。產出 *.smn.txt* 檔案。<br>• roh<br>使用 GeneASIC ROH 偵測器執行純合子區段分析，產出 *.roh.bed* 檔案。<br>• str<br>使用 ExpansionHunter 進行短片段重複序列大小估計。預設變異目錄位於 */opt/geneasic/config/\<assembly\>\_variant\_catalog.json*，其中 assembly 可以是 hs38d2 或 hs37d5。結果儲存於 *.repeat.vcf* 檔案。<br>• hla<br>使用 SpecHLA 進行人類白血球抗原分型。摘要匯出至 *.hla.txt*。<br>• mito<br>使用 GATK Mutect2 在粒線體模式下進行粒線體變異偵測，接著使用 GATK FilterMutectCalls。輸出檔案包括 *.mitochondria.filtered.vcf.gz* 檔案及其索引檔。<br>• ch<br>使用 GATK Mutect2 以腫瘤僅有 (tumor-only) 模式進行單株系造血分析。流程包括 GATK GetPileupSummaries、CalculateContamination 和 FilterMutectCalls，接著進行遺傳性變異的嚴李格過濾。結果儲存於 *.ch.filtered.clean.vcf.gz*，連同其索引檔和 *.stats* 檔案。<br>• holmes<br>使用 GeneASIC Holmes 進行自動化臨床遺傳性變異註釋與分類，產出為 *.tsv.gz* 檔案。<br>• holmes\_vcf<br> 將 Holmes 的註釋與判讀資訊附加至 VCF 檔，產出 *.holmes.vcf.gz*。此格式與 JBrowse 2 相容，可用於渲染 Ensembl VEP 使用的 CSQ 欄位。<br>• annotsv<br>執行結構變異註釋與排序，產出 *.sv.annotated.tsv* 檔案。<br>• report<br>使用 ANNOVAR 以及 gnomAD、ClinVar、CADD、Revel 和 GWAS 資料庫，針對疾病相關基因、ACMG 建議的次要發現和帶因者篩檢基因區域中的變異偵測進行變異判讀。它還包括利用 PharmCAT 進行的額外藥物基因組學臨床註釋，以及透過PGS catalog 進行的多基因風險評分。結果彙整成 PDF 和 XLSX 檔案，如果在 gconf 指令中指定了 *--annotate-all-disease-related-genes* 指令，則額外產出 \_all\_annotations.csv檔案。<br>• report\_csv<br>匯出變異判讀過程中產生的所有 CSV 檔案。
+| -t, \--target *\<CHOICE\>* |  指定所需的分析與輸出結果。*\<CHOICE\>* 可包含一個或多個選擇。<br>•fastq<br>建立指向來源 FASTQ 檔案的軟連結(symbolic link)。<br>• bam<br>使用 GeneASIC NGSAAP 比對器執行短讀長序列比對，產出 BAM 檔案及.bai 索引檔案。若配合 -s 選項且偵測到現有 BAM 檔，則改為建立軟連結。<br>• vcf<br>使用 GeneASIC NGSAAP 變異偵測器執行類似 GATK 短變異偵測，產出 .vcf.gz 檔案及 .vcf.gz.tbi 索引檔。若配合 -s 選項且偵測到現有 VCF 檔，則改為建立軟連結。<br>• sv<br>調用 Manta 偵測結構變異，產出 .sv.vcf.gz 及 .sv.vcf.gz.tbi 檔案。如果與 -s 選項一起指定時偵測到現有的 .sv.vcf.gz 檔案，此選項將建立指向輸入檔案來源的軟連結。<br>• px<br>建立指向來源輸入 .px.json 檔案的軟連結。<br>• cnv<br>使用 ASCAT R 套件執行拷貝數變異分析，並由 SLMSuite 進行分段（Segmentation）。啟用此選項會輸出 *.segment.SLMed.txt* 檔案。<br>• upd<br>執行潛在單親二倍體（Uniparental Disomy）提取，產出 .upd.txt 候選清單供變異判讀使用。<br>• smn<br>執行針對 SMN1、SMN2 及 SMN2Δ7-8 的拷貝數變異分析。產出 *.smn.txt* 檔案。<br>• roh<br>使用 GeneASIC ROH 偵測器執行純合子區段分析，產出 *.roh.bed* 檔案。<br>• str<br>使用 ExpansionHunter 進行短片段重複序列大小估計。預設變異目錄位於 */opt/geneasic/config/\<assembly\>\_variant\_catalog.json*，其中 assembly 可以是 hs38DH 或 hs37d5。結果儲存於 *.repeat.vcf* 檔案。<br>• hla<br>使用 SpecHLA 進行人類白血球抗原分型。摘要匯出至 *.hla.txt*。<br>• mito<br>使用 GATK Mutect2 在粒線體模式下進行粒線體變異偵測，接著使用 GATK FilterMutectCalls。輸出檔案包括 *.mitochondria.filtered.vcf.gz* 檔案及其索引檔。<br>• ch<br>使用 GATK Mutect2 以腫瘤僅有 (tumor-only) 模式進行單株系造血分析。流程包括 GATK GetPileupSummaries、CalculateContamination 和 FilterMutectCalls，接著進行遺傳性變異的嚴李格過濾。結果儲存於 *.ch.filtered.clean.vcf.gz*，連同其索引檔和 *.stats* 檔案。<br>• holmes<br>使用 GeneASIC Holmes 進行自動化臨床遺傳性變異註釋與分類，產出為 *.tsv.gz* 檔案。<br>• holmes\_vcf<br> 將 Holmes 的註釋與判讀資訊附加至 VCF 檔，產出 *.holmes.vcf.gz*。此格式與 JBrowse 2 相容，可用於渲染 Ensembl VEP 使用的 CSQ 欄位。<br>• annotsv<br>執行結構變異註釋與排序，產出 *.sv.annotated.tsv* 檔案。<br>• report<br>使用 ANNOVAR 以及 gnomAD、ClinVar、CADD、Revel 和 GWAS 資料庫，針對疾病相關基因、ACMG 建議的次要發現和帶因者篩檢基因區域中的變異偵測進行變異判讀。它還包括利用 PharmCAT 進行的額外藥物基因組學臨床註釋，以及透過PGS catalog 進行的多基因風險評分。結果彙整成 PDF 和 XLSX 檔案，如果在 gconf 指令中指定了 *--annotate-all-disease-related-genes* 指令，則額外產出 \_all\_annotations.csv檔案。<br>• report\_csv<br>匯出變異判讀過程中產生的所有 CSV 檔案。
 | -T, \--default-targets *\<CHOICE\>* | 為簡化 *-t* 選項指定分析和輸出項目的操作，*-T* 允許使用者透過單一輸入選取多個選項。*\<CHOICE\>* 可選項目：<br>• germline-basic<br>指定 bam, vcf, holmes 和 report 為目標輸出檔案<br>• germline-full<br>指定 *bam, vcf, cnv, upd, smn, str, sv, hla, roh, mito, ch, holmes, annotsv,report* 為目標輸出檔案 |
 | -o, \--export-dir \<DIR\>  |   指定輸出目錄。若未指定，預設為當前目錄。 |
 |  \--group-by-jbname  |    根據作業名稱（Job Name）將結果整理至各別資料夾。  |
