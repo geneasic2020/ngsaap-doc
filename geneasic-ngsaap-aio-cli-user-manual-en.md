@@ -8,7 +8,7 @@ Contact information:
 GeneASIC Technologies Corp.
 info@geneasic.com
 ```
-Version 1. 1 .0_c
+Version 1.1.0_c
 
 # GeneASIC NGSAAP All-in-One Command Line Tools User Manual
 
